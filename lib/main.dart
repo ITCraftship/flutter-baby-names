@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:name_voter/auth_model.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,7 +10,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Baby Names',
-      home: MyHomePage(),
+      home: ChangeNotifierProvider(
+        create: (_) => new AuthModel(),
+        child: Consumer<AuthModel>(builder: (context, auth, child) {
+          // inspired by https://kentcdodds.com/blog/authentication-in-react-applications
+          return !auth.isAuthenticated ? UnauthenticatedApp() : MyHomePage();
+        }),
+      ),
+    );
+  }
+}
+
+class UnauthenticatedApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Baby Name Votes')),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Center(
+          child: Text('You have to login first!'),
+        ),
+      ),
     );
   }
 }
