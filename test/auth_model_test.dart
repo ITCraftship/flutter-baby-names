@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:name_voter/auth_model.dart';
+
+import 'package:name_voter/models/auth_model.dart';
 
 void main() {
   group('setAuthenticated should', () {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:name_voter/auth.dart';
 
+// this is temporary, not removing this cause I may want to encapsulate firebase better within the app using models
 class AuthModel extends ChangeNotifier {
   BaseAuth _auth;
   bool _isAuthenticated = false;

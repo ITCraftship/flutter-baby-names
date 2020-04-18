@@ -1,4 +1,4 @@
-import 'package:name_voter/string_extension.dart';
+import 'package:name_voter/helpers/string_extension.dart';
 
 enum FormType { login, register }
 

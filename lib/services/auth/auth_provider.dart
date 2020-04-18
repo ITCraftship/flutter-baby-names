@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:name_voter/auth.dart';
+import 'package:flutter/material.dart';
+
+import 'package:name_voter/services/auth/auth.dart';
 
 class AuthProvider extends InheritedWidget {
   final BaseAuth auth;
