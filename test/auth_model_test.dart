@@ -4,7 +4,7 @@ import 'package:name_voter/auth_model.dart';
 void main() {
   group('setAuthenticated should', () {
     test('change authentication state and notify listeners', () {
-      final auth = AuthModel();
+      final auth = AuthModel(null);
       expect(auth.isAuthenticated, isFalse);
       auth.addListener(() {
         expect(auth.isAuthenticated, isTrue);
