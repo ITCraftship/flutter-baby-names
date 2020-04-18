@@ -1,0 +1,19 @@
+{
+  "name": "name_voter",
+  "version": "1.0.0",
+  "description": "App to vote on names",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "flutter test",
+    "firebase": "firebase"
+  },
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "devDependencies": {
+    "firebase-tools": "8.1.1"
+  }
+}

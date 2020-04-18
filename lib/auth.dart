@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class BaseAuth {
@@ -12,12 +13,16 @@ abstract class BaseAuth {
 }
 
 class Auth implements BaseAuth {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  // TODO: create the instance from the app:
+  // https://stackoverflow.com/questions/57015539/flutter-firestore-authentication
+  final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  Auth(FirebaseApp fbApp) : _firebaseAuth = FirebaseAuth.fromApp(fbApp);
+
   @override
-  Stream<String> get onAuthStateChanged => _firebaseAuth.onAuthStateChanged
-      .map((FirebaseUser user) => user?.providerId);
+  Stream<String> get onAuthStateChanged =>
+      _firebaseAuth.onAuthStateChanged.map((FirebaseUser user) => user?.uid);
 
   @override
   Future<String> createUserWithEmailAndPassword(
@@ -25,12 +30,12 @@ class Auth implements BaseAuth {
     return (await _firebaseAuth.createUserWithEmailAndPassword(
             email: email, password: password))
         .user
-        .providerId;
+        .uid;
   }
 
   @override
   Future<String> currentUser() async {
-    return (await _firebaseAuth.currentUser()).providerId;
+    return (await _firebaseAuth.currentUser()).uid;
   }
 
   @override
@@ -39,7 +44,7 @@ class Auth implements BaseAuth {
     return (await _firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password))
         .user
-        .providerId;
+        .uid;
   }
 
   @override
@@ -53,7 +58,7 @@ class Auth implements BaseAuth {
         idToken: auth.idToken, accessToken: auth.accessToken);
 
     final user = (await _firebaseAuth.signInWithCredential(credential)).user;
-    return user.providerId;
+    return user.uid;
   }
 
   @override

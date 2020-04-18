@@ -1,17 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:name_voter/auth.dart';
 import 'package:name_voter/auth_provider.dart';
 import 'package:name_voter/validators.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final FirebaseApp app = await FirebaseApp.configure(
+    name: 'names',
+    options: const FirebaseOptions(
+      googleAppID: '1:386140118086:ios:a7cd9c0062f7cdb9577e47',
+      gcmSenderID: '386140118086',
+      apiKey: 'AIzaSyDA92YYyAlAlvjZWL4SQM2ITNh1lWjk_VU',
+      projectID: 'flutter-baby-names-78d1e',
+    ),
+  );
+
+  runApp(MyApp(
+    fbApp: app,
+  ));
+}
 
 class MyApp extends StatelessWidget {
+  final FirebaseApp _fbApp;
+
+  const MyApp({Key key, fbApp})
+      : _fbApp = fbApp,
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AuthProvider(
-      auth: Auth(),
+      auth: Auth(_fbApp),
       child: MaterialApp(
         title: 'Baby Names',
         home: StartPage(),
@@ -201,6 +223,8 @@ class _NameListPageState extends State<NameListPage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
+      // TODO: create the Firestore instance from the app:
+      // https://stackoverflow.com/questions/57015539/flutter-firestore-authentication
       stream: Firestore.instance.collection('baby').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
@@ -231,8 +255,17 @@ class _NameListPageState extends State<NameListPage> {
         child: ListTile(
           title: Text(record.name),
           trailing: Text(record.votes.toString()),
-          onTap: () =>
-              record.reference.updateData({'votes': FieldValue.increment(1)}),
+          onTap: () async {
+            Auth auth = AuthProvider.of(context).auth;
+            final userId = await auth.currentUser();
+            final name = record.reference.documentID;
+            await Firestore.instance
+                .collection('votes')
+                .document(userId)
+                .collection('names')
+                .document(name)
+                .setData({'vote': true});
+          },
         ),
       ),
     );
