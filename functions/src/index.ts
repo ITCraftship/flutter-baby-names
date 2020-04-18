@@ -13,31 +13,30 @@ import { DocumentSnapshot } from "firebase-functions/lib/providers/firestore";
 admin.initializeApp();
 const db = admin.firestore();
 
-const handleVoteUpdate = async (newName: DocumentSnapshot) => {
+const handleVoteUpdate = async (
+  newName: DocumentSnapshot,
+  increment: number
+) => {
+  console.log(`Updating votes on ${newName.id}`);
   // if we add context parameter, then we can get context.params.name
   const name = newName.id;
-  const babyRef = db.collection("baby").doc(name);
-  await db.runTransaction(async (transaction) => {
-    const baby = await transaction.get(babyRef);
-    let newVotes = 0;
-    const oldData = baby.data() || {
+  const baby = await db.collection("baby").doc(name).get();
+  if (baby.exists) {
+    await baby.ref.update({
+      votes: admin.firestore.FieldValue.increment(increment),
+    });
+  } else {
+    await baby.ref.update({
       name: `${name[0].toUpperCase()}${name.substring(1)}`,
-    };
-
-    if (baby.exists && oldData) {
-      newVotes = oldData.votes + 1;
-    }
-
-    return transaction.set(babyRef, { ...oldData, votes: newVotes });
-  });
+      votes: admin.firestore.FieldValue.increment(increment),
+    });
+  }
 };
 
 export const addVote = functions.firestore
   .document("/votes/{userId}/names/{name}")
-  .onCreate(handleVoteUpdate);
+  .onCreate((newName) => handleVoteUpdate(newName, 1));
 
 export const deleteVote = functions.firestore
   .document("/votes/{userId}/names/{name}")
-  .onDelete(async (change, context) => {
-    console.log("Doing nothing now");
-  });
+  .onDelete((newName) => handleVoteUpdate(newName, -1));
