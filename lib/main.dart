@@ -259,6 +259,9 @@ class _NameListPageState extends State<NameListPage> {
             Auth auth = AuthProvider.of(context).auth;
             final userId = await auth.currentUser();
             final name = record.reference.documentID;
+            // TODO: the votes are updated through functions hooks, so on the UI let's set the state
+            // immediately and then wait for it to re-render (ex. someone else voted)
+            // if the data coming from FB is the same, the UI won't update anyways
             await Firestore.instance
                 .collection('votes')
                 .document(userId)
