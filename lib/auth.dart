@@ -45,13 +45,15 @@ class Auth implements BaseAuth {
   @override
   Future<String> signInWithGoogle() async {
     final GoogleSignInAccount account = await _googleSignIn.signIn();
+    if (account == null) {
+      throw new Exception('Google login failed');
+    }
     final GoogleSignInAuthentication auth = await account.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
         idToken: auth.idToken, accessToken: auth.accessToken);
 
-    return (await _firebaseAuth.signInWithCredential(credential))
-        .user
-        .providerId;
+    final user = (await _firebaseAuth.signInWithCredential(credential)).user;
+    return user.providerId;
   }
 
   @override

@@ -85,6 +85,16 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void signInWithGoogle() async {
+    try {
+      final _auth = AuthProvider.of(context).auth;
+      final id = await _auth.signInWithGoogle();
+      print('signed in with google $id');
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,6 +142,10 @@ class _LoginPageState extends State<LoginPage> {
             switchFormState(FormType.register);
           },
           child: Text('Register'),
+        ),
+        FlatButton(
+          child: Text('Sign in with Google'),
+          onPressed: signInWithGoogle,
         )
       ];
     } else {
