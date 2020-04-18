@@ -1,6 +1,15 @@
 # name_voter
 
-A new Flutter project.
+A new Flutter project to play around with Cloud Firestore, Firebase Auth, etc.
+
+## Resouces used for inspiration for this project
+
+- Baby Names app: https://codelabs.developers.google.com/codelabs/flutter-firebase/
+- Firebase auth: https://www.youtube.com/watch?v=OlcYP6UXlm8
+
+The rest is my own invention to experiment with:
+
+- eventual consistency with the use of aggregates in Firebase Functions
 
 ## Getting Started
 
