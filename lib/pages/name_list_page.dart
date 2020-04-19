@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'package:name_voter/models/name_record_model.dart';
 import 'package:name_voter/services/auth/auth.dart';
 import 'package:name_voter/services/auth/auth_provider.dart';
 
@@ -55,7 +56,7 @@ class _NameListPageState extends State<NameListPage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
+    final record = NameRecord.fromSnapshot(data);
 
     return Padding(
       key: ValueKey(record.name),
@@ -71,7 +72,7 @@ class _NameListPageState extends State<NameListPage> {
           onTap: () async {
             Auth auth = AuthProvider.of(context).auth;
             final userId = await auth.currentUser();
-            final name = record.reference.documentID;
+            final name = record.id;
             // TODO: the votes are updated through functions hooks, so on the UI let's set the state
             // immediately and then wait for it to re-render (ex. someone else voted)
             // if the data coming from FB is the same, the UI won't update anyways
@@ -86,22 +87,4 @@ class _NameListPageState extends State<NameListPage> {
       ),
     );
   }
-}
-
-class Record {
-  final String name;
-  final int votes;
-  final DocumentReference reference;
-
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['name'] != null),
-        assert(map['votes'] != null),
-        name = map['name'],
-        votes = map['votes'];
-
-  Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$name:$votes>";
 }
