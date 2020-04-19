@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:name_voter/models/validators.dart';
-import 'package:name_voter/services/auth/auth_provider.dart';
+import 'package:name_voter/services/auth/auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   void submit() async {
     if (validate()) {
       try {
-        final auth = AuthProvider.of(context).auth;
+        final auth = Provider.of<BaseAuth>(context, listen: false);
         if (_formType == FormType.login) {
           String userId =
               await auth.signInWithEmailAndPassword(_email, _password);
@@ -53,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void signInWithGoogle() async {
     try {
-      final _auth = AuthProvider.of(context).auth;
-      final id = await _auth.signInWithGoogle();
+      final auth = Provider.of<BaseAuth>(context, listen: false);
+      final id = await auth.signInWithGoogle();
       print('signed in with google $id');
     } catch (e) {
       print(e);

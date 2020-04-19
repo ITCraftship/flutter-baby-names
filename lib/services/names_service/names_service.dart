@@ -11,8 +11,8 @@ class NamesService extends NamesServiceBase {
   Firestore _firestore = Firestore.instance;
   @override
   Stream<List<NameRecord>> all() {
-    return _firestore.collection('baby').snapshots().map(
-        (event) => event.documents.map((doc) => NameRecord.fromSnapshot(doc)));
+    return _firestore.collection('baby').snapshots().map((event) =>
+        event.documents.map((doc) => NameRecord.fromSnapshot(doc)).toList());
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class BaseAuth {
@@ -13,8 +12,6 @@ abstract class BaseAuth {
 }
 
 class Auth implements BaseAuth {
-  // TODO: create the instance from the app:
-  // https://stackoverflow.com/questions/57015539/flutter-firestore-authentication
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 

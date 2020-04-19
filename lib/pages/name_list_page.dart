@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:name_voter/services/names_service/names_service.dart';
 import 'package:name_voter/models/name_record_model.dart';
 import 'package:name_voter/services/auth/auth.dart';
-import 'package:name_voter/services/auth/auth_provider.dart';
 
 class NameListPage extends StatefulWidget {
   @override
@@ -22,7 +22,7 @@ class _NameListPageState extends State<NameListPage> {
           FlatButton(
               onPressed: () async {
                 try {
-                  Auth auth = AuthProvider.of(context).auth;
+                  final auth = Provider.of<BaseAuth>(context, listen: false);
                   await auth.signOut();
                 } catch (e) {
                   print(e);
@@ -36,28 +36,26 @@ class _NameListPageState extends State<NameListPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      // TODO: create the Firestore instance from the app:
-      // https://stackoverflow.com/questions/57015539/flutter-firestore-authentication
-      stream: Firestore.instance.collection('baby').snapshots(),
+    final namesService = Provider.of<NamesServiceBase>(context, listen: false);
+
+    return StreamBuilder<List<NameRecord>>(
+      stream: namesService.all(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildList(context, snapshot.data.documents);
+        return _buildList(context, snapshot.data);
       },
     );
   }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+  Widget _buildList(BuildContext context, List<NameRecord> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
       children: snapshot.map((data) => _buildListItem(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = NameRecord.fromSnapshot(data);
-
+  Widget _buildListItem(BuildContext context, NameRecord record) {
     return Padding(
       key: ValueKey(record.name),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -70,18 +68,12 @@ class _NameListPageState extends State<NameListPage> {
           title: Text(record.name),
           trailing: Text(record.votes.toString()),
           onTap: () async {
-            Auth auth = AuthProvider.of(context).auth;
+            final auth = Provider.of<BaseAuth>(context, listen: false);
+            final namesService =
+                Provider.of<NamesServiceBase>(context, listen: false);
             final userId = await auth.currentUser();
             final name = record.id;
-            // TODO: the votes are updated through functions hooks, so on the UI let's set the state
-            // immediately and then wait for it to re-render (ex. someone else voted)
-            // if the data coming from FB is the same, the UI won't update anyways
-            await Firestore.instance
-                .collection('votes')
-                .document(userId)
-                .collection('names')
-                .document(name)
-                .setData({'vote': true});
+            await namesService.recordVote(userId, name);
           },
         ),
       ),
