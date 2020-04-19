@@ -8,7 +8,7 @@ abstract class NamesServiceBase {
 }
 
 class NamesService extends NamesServiceBase {
-  Firestore _firestore;
+  Firestore _firestore = Firestore.instance;
   @override
   Stream<List<NameRecord>> all() {
     return _firestore.collection('baby').snapshots().map(

@@ -15,10 +15,8 @@ abstract class BaseAuth {
 class Auth implements BaseAuth {
   // TODO: create the instance from the app:
   // https://stackoverflow.com/questions/57015539/flutter-firestore-authentication
-  final FirebaseAuth _firebaseAuth;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  Auth(FirebaseApp fbApp) : _firebaseAuth = FirebaseAuth.fromApp(fbApp);
 
   @override
   Stream<String> get onAuthStateChanged =>

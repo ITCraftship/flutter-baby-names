@@ -8,32 +8,14 @@ import 'package:name_voter/pages/name_list_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final FirebaseApp app = await FirebaseApp.configure(
-    name: 'names',
-    options: const FirebaseOptions(
-      googleAppID: '1:386140118086:ios:a7cd9c0062f7cdb9577e47',
-      gcmSenderID: '386140118086',
-      apiKey: 'AIzaSyDA92YYyAlAlvjZWL4SQM2ITNh1lWjk_VU',
-      projectID: 'flutter-baby-names-78d1e',
-    ),
-  );
-
-  runApp(MyApp(
-    fbApp: app,
-  ));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final FirebaseApp _fbApp;
-
-  const MyApp({Key key, fbApp})
-      : _fbApp = fbApp,
-        super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return AuthProvider(
-      auth: Auth(_fbApp),
+      auth: Auth(),
       child: MaterialApp(
         title: 'Baby Names',
         home: StartPage(),
