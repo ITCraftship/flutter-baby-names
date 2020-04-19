@@ -36,7 +36,7 @@ class _NameListPageState extends State<NameListPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final namesService = Provider.of<NamesServiceBase>(context, listen: false);
+    final namesService = Provider.of<NamesServiceBase>(context);
 
     return StreamBuilder<List<NameRecord>>(
       stream: namesService.all(),
