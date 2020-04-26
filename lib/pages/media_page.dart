@@ -3,10 +3,14 @@ import 'package:image_picker/image_picker.dart';
 
 class MediaPage extends StatelessWidget {
   Future getImage(BuildContext context) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    String message = 'No image selected';
+    if (image != null) {
+      message = 'Image added ${image.uri}!';
+    }
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(
-        'Image added ${image.uri}!',
+        message,
         style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       backgroundColor: Theme.of(context).dialogBackgroundColor,
