@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:name_voter/pages/media_page.dart';
 import 'package:provider/provider.dart';
 
 import 'package:name_voter/pages/name_list_page.dart';
@@ -26,13 +27,12 @@ final tabs = <TabContainer>[
       ),
       NameListPage()),
   TabContainer(
-      BottomNavigationBarItem(
-        icon: Icon(Icons.perm_media),
-        title: Text('Media'),
-      ),
-      Center(
-        child: Text('Second'),
-      ))
+    BottomNavigationBarItem(
+      icon: Icon(Icons.perm_media),
+      title: Text('Media'),
+    ),
+    MediaPage(),
+  )
 ];
 
 class _TabBarPageState extends State<TabBarPage> {
