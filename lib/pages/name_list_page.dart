@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,37 +5,9 @@ import 'package:name_voter/services/names_service/names_service.dart';
 import 'package:name_voter/models/name_record_model.dart';
 import 'package:name_voter/services/auth/auth.dart';
 
-class NameListPage extends StatefulWidget {
-  @override
-  _NameListPageState createState() {
-    return _NameListPageState();
-  }
-}
-
-class _NameListPageState extends State<NameListPage> {
+class NameListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Baby Name Votes'),
-        actions: <Widget>[
-          FlatButton(
-              onPressed: () async {
-                try {
-                  final auth = Provider.of<BaseAuth>(context, listen: false);
-                  await auth.signOut();
-                } catch (e) {
-                  print(e);
-                }
-              },
-              child: Text('Sign out'))
-        ],
-      ),
-      body: _buildBody(context),
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
     final namesService = Provider.of<NamesServiceBase>(context);
 
     return StreamBuilder<List<NameRecord>>(

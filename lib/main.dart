@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
-import 'package:name_voter/services/auth/auth.dart';
-import 'package:name_voter/pages/login_page.dart';
-import 'package:name_voter/pages/name_list_page.dart';
-import 'package:name_voter/services/names_service/names_service.dart';
 import 'package:provider/provider.dart';
+
+import 'package:name_voter/pages/tabbar_page.dart';
+import 'package:name_voter/pages/login_page.dart';
+import 'package:name_voter/services/auth/auth.dart';
+import 'package:name_voter/services/names_service/names_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,14 +25,14 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Baby Names',
-        home: StartPage(),
+        home: LoginSwitcher(),
         theme: ThemeData.dark(),
       ),
     );
   }
 }
 
-class StartPage extends StatelessWidget {
+class LoginSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BaseAuth auth = Provider.of<BaseAuth>(context);
@@ -41,7 +41,7 @@ class StartPage extends StatelessWidget {
         builder: (context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             final bool loggedIn = snapshot.hasData;
-            return !loggedIn ? LoginPage() : NameListPage();
+            return !loggedIn ? LoginPage() : TabBarPage();
           }
           return CircularProgressIndicator();
         });
