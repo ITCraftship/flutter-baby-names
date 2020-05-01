@@ -17,27 +17,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          Provider<BaseAuth>(
-            create: (context) => Auth(),
-          ),
-        ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NameVotesBloc>(
-              create: (context) {
-                return NameVotesBloc(
-                    nameVotesRepository: FirestoreNameVotesRepository())
-                  ..add(LoadNameVotes());
-              },
-            )
-          ],
-          child: MaterialApp(
-            title: 'Baby Names',
-            home: LoginSwitcher(),
-            theme: ThemeData.dark(),
-          ),
-        ));
+      providers: [
+        Provider<BaseAuth>(
+          create: (context) => Auth(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Baby Names',
+        home: LoginSwitcher(),
+        theme: ThemeData.dark(),
+      ),
+    );
   }
 }
 
@@ -50,7 +40,17 @@ class LoginSwitcher extends StatelessWidget {
         builder: (context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             final bool loggedIn = snapshot.hasData;
-            return !loggedIn ? LoginPage() : TabBarPage();
+            return !loggedIn
+                ? LoginPage()
+                : MultiBlocProvider(providers: [
+                    BlocProvider<NameVotesBloc>(
+                      create: (context) {
+                        return NameVotesBloc(
+                            nameVotesRepository: FirestoreNameVotesRepository())
+                          ..add(LoadNameVotes());
+                      },
+                    )
+                  ], child: TabBarPage());
           }
           return CircularProgressIndicator();
         });
