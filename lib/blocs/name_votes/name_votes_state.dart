@@ -14,7 +14,7 @@ class NameVotesLoaded extends NameVotesState {
   NameVotesLoaded(this.votes) : super();
 
   @override
-  List<Object> get props => ['votes'];
+  List<Object> get props => [votes];
 }
 
 class NameVotesNotLoaded extends NameVotesState {}

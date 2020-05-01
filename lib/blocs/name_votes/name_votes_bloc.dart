@@ -49,8 +49,9 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
         }
         return vote;
       }).toList();
+      // TODO: should not make a vote if this user has already given a vote on this name
       add(UpdateNameVotes(newVotes));
-      await _nameVotesRepository.recordVote(event.userId, event.vote.name);
+      await _nameVotesRepository.recordVote(event.userId, event.vote.id);
     }
   }
 

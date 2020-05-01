@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-@immutable
 class NameVote extends Equatable {
   final String id;
   final String name;
@@ -31,5 +29,5 @@ class NameVote extends Equatable {
   String toString() => "Record<$name:$votes>";
 
   @override
-  List<Object> get props => ['id', 'name', 'votes'];
+  List<Object> get props => [id, name, votes];
 }
