@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:name_voter/repositories/name_votes/name_votes_repository.dart';
 import 'package:provider/provider.dart';
 
-import 'package:name_voter/services/names_service/names_service.dart';
-import 'package:name_voter/models/name_record_model.dart';
+import 'package:name_voter/models/name_vote_model.dart';
 import 'package:name_voter/services/auth/auth.dart';
 
 class NameListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final namesService = Provider.of<NamesServiceBase>(context);
+    final names = Provider.of<NameVotesRepository>(context);
 
-    return StreamBuilder<List<NameRecord>>(
-      stream: namesService.all(),
+    return StreamBuilder<List<NameVote>>(
+      stream: names.all(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -20,14 +20,14 @@ class NameListPage extends StatelessWidget {
     );
   }
 
-  Widget _buildList(BuildContext context, List<NameRecord> snapshot) {
+  Widget _buildList(BuildContext context, List<NameVote> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
       children: snapshot.map((data) => _buildListItem(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, NameRecord record) {
+  Widget _buildListItem(BuildContext context, NameVote record) {
     return Padding(
       key: ValueKey(record.name),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -41,11 +41,11 @@ class NameListPage extends StatelessWidget {
           trailing: Text(record.votes.toString()),
           onTap: () async {
             final auth = Provider.of<BaseAuth>(context, listen: false);
-            final namesService =
-                Provider.of<NamesServiceBase>(context, listen: false);
+            final names =
+                Provider.of<NameVotesRepository>(context, listen: false);
             final userId = await auth.currentUser();
             final name = record.id;
-            await namesService.recordVote(userId, name);
+            await names.recordVote(userId, name);
           },
         ),
       ),

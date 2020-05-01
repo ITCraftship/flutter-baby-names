@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:name_voter/pages/tabbar_page.dart';
 import 'package:name_voter/pages/login_page.dart';
 import 'package:name_voter/services/auth/auth.dart';
-import 'package:name_voter/services/names_service/names_service.dart';
+import 'package:name_voter/repositories/name_votes/name_votes_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
         Provider<BaseAuth>(
           create: (context) => Auth(),
         ),
-        Provider<NamesServiceBase>(
-          create: (context) => NamesService(),
+        Provider<NameVotesRepository>(
+          create: (context) => FirestoreNameVotesRepository(),
         ),
       ],
       child: MaterialApp(

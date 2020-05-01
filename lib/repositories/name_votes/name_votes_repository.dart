@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:name_voter/models/name_record_model.dart';
+import 'package:name_voter/models/name_vote_model.dart';
 
-abstract class NamesServiceBase {
-  Stream<List<NameRecord>> all();
+abstract class NameVotesRepository {
+  Stream<List<NameVote>> all();
   Future<void> recordVote(String userId, String name);
 }
 
-class NamesService extends NamesServiceBase {
+class FirestoreNameVotesRepository extends NameVotesRepository {
   Firestore _firestore = Firestore.instance;
   @override
-  Stream<List<NameRecord>> all() {
+  Stream<List<NameVote>> all() {
     return _firestore.collection('baby').snapshots().map((event) =>
-        event.documents.map((doc) => NameRecord.fromSnapshot(doc)).toList());
+        event.documents.map((doc) => NameVote.fromSnapshot(doc)).toList());
   }
 
   @override
