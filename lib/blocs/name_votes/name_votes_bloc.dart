@@ -14,7 +14,7 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
   StreamSubscription _votesSubscription;
 
   NameVotesBloc({@required nameVotesRepository})
-      : assert(_nameVotesRepository != null),
+      : assert(nameVotesRepository != null),
         _nameVotesRepository = nameVotesRepository;
 
   @override
@@ -25,11 +25,11 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
     NameVotesEvent event,
   ) async* {
     if (event is LoadNameVotes) {
-      yield* _mapLoadNameVotesToState();
+      _mapLoadNameVotesToState();
     } else if (event is UpdateNameVotes) {
       yield* _mapUpdateNameVotesToState(event);
     } else if (event is SubmitNameVote) {
-      yield* _mapSubmitNameVoteToState(event);
+      _mapSubmitNameVoteToState(event);
     }
   }
 
@@ -40,7 +40,7 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
         .listen((votes) => add(UpdateNameVotes(votes)));
   }
 
-  _mapSubmitNameVoteToState(SubmitNameVote event) async* {
+  _mapSubmitNameVoteToState(SubmitNameVote event) async {
     final NameVotesState currentState = state;
     if (currentState is NameVotesLoaded) {
       final newVotes = currentState.votes.map((vote) {
@@ -48,8 +48,9 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
           return vote.copyWith(votes: vote.votes + 1);
         }
         return vote;
-      });
+      }).toList();
       add(UpdateNameVotes(newVotes));
+      await _nameVotesRepository.recordVote(event.userId, event.vote.name);
     }
   }
 

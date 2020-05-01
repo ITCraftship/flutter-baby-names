@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:name_voter/blocs/name_votes/name_votes_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:name_voter/pages/tabbar_page.dart';
@@ -15,20 +17,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        Provider<BaseAuth>(
-          create: (context) => Auth(),
-        ),
-        Provider<NameVotesRepository>(
-          create: (context) => FirestoreNameVotesRepository(),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Baby Names',
-        home: LoginSwitcher(),
-        theme: ThemeData.dark(),
-      ),
-    );
+        providers: [
+          Provider<BaseAuth>(
+            create: (context) => Auth(),
+          ),
+        ],
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<NameVotesBloc>(
+              create: (context) {
+                return NameVotesBloc(
+                    nameVotesRepository: FirestoreNameVotesRepository())
+                  ..add(LoadNameVotes());
+              },
+            )
+          ],
+          child: MaterialApp(
+            title: 'Baby Names',
+            home: LoginSwitcher(),
+            theme: ThemeData.dark(),
+          ),
+        ));
   }
 }
 
