@@ -40,13 +40,15 @@ class LoginSwitcher extends StatelessWidget {
         builder: (context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             final bool loggedIn = snapshot.hasData;
+            final String userId = snapshot.data;
             return !loggedIn
                 ? LoginPage()
                 : MultiBlocProvider(providers: [
                     BlocProvider<NameVotesBloc>(
                       create: (context) {
                         return NameVotesBloc(
-                            nameVotesRepository: FirestoreNameVotesRepository())
+                            nameVotesRepository:
+                                FirestoreNameVotesRepository(userId))
                           ..add(LoadNameVotes());
                       },
                     )

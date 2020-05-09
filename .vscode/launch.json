@@ -9,6 +9,10 @@
       "type": "dart",
       "request": "launch",
       "program": "./test/"
+      // "env": {
+      //   "DART_VM_OPTIONS": "-D",
+      //   "SILENT_OBSERVATORY": true
+      // }
     },
     {
       "name": "Flutter",

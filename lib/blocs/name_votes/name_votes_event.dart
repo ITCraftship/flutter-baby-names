@@ -19,11 +19,19 @@ class UpdateNameVotes extends NameVotesEvent {
 }
 
 class SubmitNameVote extends NameVotesEvent {
-  final String userId;
   final NameVote vote;
 
-  SubmitNameVote(this.userId, this.vote);
+  SubmitNameVote(this.vote);
 
   @override
   List<Object> get props => [vote];
+}
+
+class UpdateUserVotes extends NameVotesEvent {
+  final UserVotes votes;
+
+  UpdateUserVotes(this.votes);
+
+  @override
+  List<Object> get props => [votes];
 }

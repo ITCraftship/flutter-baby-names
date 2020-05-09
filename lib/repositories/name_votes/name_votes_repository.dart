@@ -1,14 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:name_voter/models/name_vote_model.dart';
+import 'package:name_voter/models/user_votes.dart';
 
 abstract class NameVotesRepository {
   Stream<List<NameVote>> all();
-  Future<void> recordVote(String userId, String name);
+  Stream<UserVotes> my();
+  Future<void> recordVote(String name);
 }
 
 class FirestoreNameVotesRepository extends NameVotesRepository {
+  final String _userId;
   Firestore _firestore = Firestore.instance;
+
+  FirestoreNameVotesRepository(this._userId);
+
   @override
   Stream<List<NameVote>> all() {
     return _firestore.collection('baby').snapshots().map((event) =>
@@ -16,10 +22,20 @@ class FirestoreNameVotesRepository extends NameVotesRepository {
   }
 
   @override
-  Future<void> recordVote(String userId, String name) async {
+  Stream<UserVotes> my() {
+    return _firestore
+        .collection('votes')
+        .document(_userId)
+        .collection('names')
+        .snapshots()
+        .map((event) => UserVotes.fromSnapshot(event));
+  }
+
+  @override
+  Future<void> recordVote(String name) async {
     await _firestore
         .collection('votes')
-        .document(userId)
+        .document(_userId)
         .collection('names')
         .document(name)
         .setData({'vote': true});

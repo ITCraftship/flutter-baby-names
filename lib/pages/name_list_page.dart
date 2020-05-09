@@ -15,7 +15,7 @@ class NameListPage extends StatelessWidget {
           return LinearProgressIndicator();
         }
         if (state is NameVotesLoaded) {
-          return _buildList(context, state.votes);
+          return _buildList(context, state.nameVotes);
         }
         return Text('Uknown state');
       },
@@ -42,10 +42,7 @@ class NameListPage extends StatelessWidget {
           title: Text(record.name),
           trailing: Text(record.votes.toString()),
           onTap: () async {
-            final auth = Provider.of<BaseAuth>(context, listen: false);
-            final userId = await auth.currentUser();
-            BlocProvider.of<NameVotesBloc>(context)
-                .add(SubmitNameVote(userId, record));
+            BlocProvider.of<NameVotesBloc>(context).add(SubmitNameVote(record));
           },
         ),
       ),

@@ -10,11 +10,16 @@ abstract class NameVotesState extends Equatable {
 class NameVotesLoading extends NameVotesState {}
 
 class NameVotesLoaded extends NameVotesState {
-  final List<NameVote> votes;
-  NameVotesLoaded(this.votes) : super();
+  final List<NameVote> nameVotes;
+  final UserVotes userVotes;
+
+  NameVotesLoaded({nameVotes, userVotes})
+      : this.nameVotes = nameVotes ?? [],
+        this.userVotes = userVotes ?? UserVotes(),
+        super();
 
   @override
-  List<Object> get props => [votes];
+  List<Object> get props => [nameVotes, userVotes];
 }
 
 class NameVotesNotLoaded extends NameVotesState {}
