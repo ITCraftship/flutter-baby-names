@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 import 'package:name_voter/models/name_vote_model.dart';
 import 'package:name_voter/blocs/name_votes/name_votes_bloc.dart';
-import 'package:name_voter/services/auth/auth.dart';
 
 class NameListPage extends StatelessWidget {
   @override
