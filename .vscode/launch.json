@@ -15,6 +15,12 @@
       // }
     },
     {
+      "name": "Flutter: Run current Test",
+      "type": "dart",
+      "request": "launch",
+      "program": "${relativeFile}"
+    },
+    {
       "name": "Flutter",
       "request": "launch",
       "type": "dart"

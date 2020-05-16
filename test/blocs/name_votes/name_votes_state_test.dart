@@ -47,7 +47,7 @@ void main() {
         final state1 = NameVotesLoaded(userVotes: userVotes1);
         final userVotes2 = UserVotes(votedNames: {'annie', 'nina'});
         final state2 = NameVotesLoaded(userVotes: userVotes2);
-        expect(state1 == state2, isTrue);
+        expect(state1 == state2, isFalse);
       });
     });
   });
