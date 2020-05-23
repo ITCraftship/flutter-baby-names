@@ -96,5 +96,7 @@ void main() {
         NameVotesLoaded(nameVotes: nameVotes, userVotes: userVotes)
       ]);
     });
+
+    // TODO: test that when the user has already submitted a vote, there will be no update of vote count
   });
 }
