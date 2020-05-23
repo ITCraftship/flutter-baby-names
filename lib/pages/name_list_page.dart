@@ -21,10 +21,14 @@ class NameListPage extends StatelessWidget {
   }
 
   Widget _buildList(BuildContext context, List<NameVote> votes) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 20.0),
-      children: votes.map((data) => _buildListItem(context, data)).toList(),
-    );
+    return votes.length > 0
+        ? ListView(
+            padding: const EdgeInsets.only(top: 20.0),
+            children:
+                votes.map((data) => _buildListItem(context, data)).toList())
+        : Center(
+            child: Text('No names available to vote'),
+          );
   }
 
   Widget _buildListItem(BuildContext context, NameVote record) {
