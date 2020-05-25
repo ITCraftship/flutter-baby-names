@@ -277,3 +277,4 @@ dist
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+ios/Flutter/.last_build_id

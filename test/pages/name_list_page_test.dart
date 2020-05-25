@@ -6,11 +6,18 @@ import 'package:mockito/mockito.dart';
 
 import 'package:name_voter/blocs/name_votes/name_votes_bloc.dart';
 import 'package:name_voter/models/name_vote_model.dart';
+import 'package:name_voter/models/user_votes.dart';
 import 'package:name_voter/pages/name_list_page.dart';
+import 'package:name_voter/repositories/name_votes/name_votes_repository.dart';
 
 // we're mocking the bloc, but we could have more of an integration test by not mocking the bloc, rather the firestore stream
 class MockNameVotesBloc extends MockBloc<NameVotesEvent, NameVotesState>
     implements NameVotesBloc {}
+
+// TODO: we can even go a layer deeper here and mock Firebase dependency of the NameVotesRepository
+// however since we want to treat the repository as an abstraction, that can just as well be hooked up
+// to something like AWS Amplify, a GraphQL or REST back-end, we'll not do it
+class MockNameVotesRepository extends Mock implements NameVotesRepository {}
 
 // TODO: mock firestore and create tests through the BloC layer
 
@@ -31,7 +38,7 @@ class TestWidget extends StatelessWidget {
 
 void main() {
   group('NameListPage', () {
-    testWidgets('render a loader when the bloc is in NameVotesLoading state',
+    testWidgets('renders a loader when the bloc is in NameVotesLoading state',
         (WidgetTester tester) async {
       final MockNameVotesBloc bloc = MockNameVotesBloc();
       whenListen(bloc, Stream.value(NameVotesLoading()));
@@ -77,5 +84,39 @@ void main() {
       expect(find.text('3'), findsOneWidget);
       expect(find.byType(ListTile), findsNWidgets(2));
     });
+
+    testWidgets(
+        'renders a checkmark icon next to a name that we already voted for',
+        (WidgetTester tester) async {
+      final nameVotes = [
+        NameVote(id: 'julie', name: 'Julie', votes: 0),
+        NameVote(id: 'anne', name: 'Anne', votes: 3),
+        NameVote(id: 'jenny', name: 'Jenny', votes: 5)
+      ];
+      final userVotes = UserVotes(votedNames: {'jenny'});
+      final MockNameVotesBloc bloc = MockNameVotesBloc();
+      whenListen(
+          bloc,
+          Stream.value(
+              NameVotesLoaded(nameVotes: nameVotes, userVotes: userVotes)));
+      when(bloc.state).thenAnswer(
+          (_) => NameVotesLoaded(nameVotes: nameVotes, userVotes: userVotes));
+
+      await tester.pumpWidget(BlocProvider<NameVotesBloc>(
+        create: (context) => bloc,
+        child: TestWidget(),
+      ));
+      expect(find.byType(ListTile), findsNWidgets(3));
+      expect(
+          find.byWidgetPredicate(
+              (Widget widget) => widget is ListTile && widget.leading != null),
+          findsNWidgets(1));
+    });
+
+    // group('integration tests', () {
+    //   test(
+    //       'shows a checkmark icon next to the names the current user has voted on',
+    //       () {});
+    // });
   });
 }

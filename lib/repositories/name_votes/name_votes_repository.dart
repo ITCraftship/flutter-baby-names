@@ -9,6 +9,10 @@ abstract class NameVotesRepository {
   Future<void> recordVote(String name);
 }
 
+// TODO: we can implement more repositories using for example:
+// GraphQL, REST, AWS Amplify – this will help determine whether the BloC we implemented
+// is abstract enough to support different integration patterns
+
 class FirestoreNameVotesRepository extends NameVotesRepository {
   final String _userId;
   Firestore _firestore = Firestore.instance;
