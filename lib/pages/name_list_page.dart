@@ -45,6 +45,8 @@ class NameListPage extends StatelessWidget {
         Row(
           children: [
             Expanded(
+                child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: RaisedButton(
                 onPressed: () {
                   showDialog(
@@ -57,9 +59,9 @@ class NameListPage extends StatelessWidget {
                     },
                   );
                 },
-                child: Text('Submit a name'),
+                child: Text('Propose a new name'),
               ),
-            )
+            ))
           ],
         )
       ],
@@ -115,26 +117,23 @@ class _NewNameDialogState extends State<NewNameDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Column(
-        children: [
-          Padding(
-              padding: EdgeInsets.all(5),
-              child: TextField(
-                controller: newNameTextController,
-              )),
-          RaisedButton(
-            onPressed: () {
-              bloc.add(SubmitNameVote(NameVote(
-                  id: newNameTextController.text.toLowerCase(),
-                  name: newNameTextController.text,
-                  votes: 0)));
-              Navigator.of(context).pop();
-            },
-            child: Text('Save'),
-          )
-        ],
+    return AlertDialog(
+      title: Text('Propose new name'),
+      content: TextField(
+        controller: newNameTextController,
       ),
+      actions: [
+        FlatButton(
+          onPressed: () {
+            bloc.add(SubmitNameVote(NameVote(
+                id: newNameTextController.text.toLowerCase(),
+                name: newNameTextController.text,
+                votes: 0)));
+            Navigator.of(context).pop();
+          },
+          child: Text('Propose'),
+        )
+      ],
     );
   }
 }
