@@ -26,7 +26,7 @@ const handleVoteUpdate = async (
       votes: admin.firestore.FieldValue.increment(increment),
     });
   } else {
-    await baby.ref.update({
+    await baby.ref.set({
       name: `${name[0].toUpperCase()}${name.substring(1)}`,
       votes: admin.firestore.FieldValue.increment(increment),
     });
