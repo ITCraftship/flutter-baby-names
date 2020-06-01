@@ -50,7 +50,7 @@ class NameListPage extends StatelessWidget {
   Widget buildProposeButton(BuildContext context) {
     final proposeNameHandler = (String name) {
       BlocProvider.of<NameVotesBloc>(context).add(SubmitNameVote(
-          NameVote(id: name.toLowerCase(), name: name, votes: 0)));
+          NameVote(id: name.toLowerCase(), name: name, votes: 1)));
     };
 
     return Row(

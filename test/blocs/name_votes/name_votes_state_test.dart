@@ -49,6 +49,22 @@ void main() {
         final state2 = NameVotesLoaded(userVotes: userVotes2);
         expect(state1 == state2, isFalse);
       });
+
+      test('be equal when user votes and name votes are the same', () {
+        final state1 = NameVotesLoaded(nameVotes: [
+          NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
+          NameVote(id: 'carrie', name: 'Carrie', votes: 1, reference: null),
+          NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
+        ], userVotes: UserVotes.fromSet({'bonnie', 'carrie,' 'clyde'}));
+
+        final state2 = NameVotesLoaded(nameVotes: [
+          NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
+          NameVote(id: 'carrie', name: 'Carrie', votes: 1, reference: null),
+          NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
+        ], userVotes: UserVotes.fromSet({'bonnie', 'carrie,' 'clyde'}));
+
+        expect(state1 == state2, isTrue);
+      });
     });
   });
 }

@@ -17,8 +17,8 @@
     {
       "name": "Flutter: Run current Test",
       "type": "dart",
-      "request": "launch",
-      "program": "${relativeFile}"
+      "request": "launch"
+      // "program": "${relativeFile}"
     },
     {
       "name": "Flutter",

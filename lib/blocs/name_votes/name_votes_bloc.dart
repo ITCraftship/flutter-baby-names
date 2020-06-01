@@ -64,13 +64,23 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
     // this will refresh the UI immediately and then eventually refresh the UI when another user
     // voted on the same name because of the listener created in _mapLoadNameVotesToState()
     if (!currentState.userVotes.hasVote(event.vote.id)) {
-      final newVotes = currentState.nameVotes.map((vote) {
-        if (vote.id == event.vote.id) {
-          return vote.copyWith(votes: vote.votes + 1);
-        }
-        return vote;
-      }).toList();
-      add(UpdateNameVotes(newVotes));
+      if (currentState.nameVotes.any((vote) => vote.id == event.vote.id)) {
+        final newVotes = currentState.nameVotes.map((vote) {
+          if (vote.id == event.vote.id) {
+            return vote.copyWith(votes: vote.votes + 1);
+          }
+          return vote;
+        }).toList();
+
+        add(UpdateNameVotes(newVotes));
+      } else {
+        final newVotes = [...currentState.nameVotes, event.vote];
+        newVotes.sort((a, b) => a.id.compareTo(b.id));
+        add(UpdateNameVotes(newVotes));
+      }
+
+      add(UpdateUserVotes(UserVotes.fromSet(
+          {...currentState.userVotes.votedNames, event.vote.id})));
     }
 
     // but still writing to the repository in case another device has deleted the vote

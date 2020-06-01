@@ -98,5 +98,45 @@ void main() {
     });
 
     // TODO: test that when the user has already submitted a vote, there will be no update of vote count
+
+    blocTest(
+        'publishes [NameVotesLoaded] with the new vote when the submitted name vote didn\'t exist',
+        build: () async {
+          when(nameVotesRepository.all())
+              .thenAnswer((realInvocation) => Stream.empty());
+          when(nameVotesRepository.my())
+              .thenAnswer((realInvocation) => Stream.empty());
+          when(nameVotesRepository.recordVote(argThat(anything)))
+              .thenAnswer((_) => Future.value());
+          return NameVotesBloc(nameVotesRepository: nameVotesRepository);
+        },
+        act: (bloc) {
+          final nameVotes = [
+            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
+            NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
+          ];
+          final userVotes = UserVotes.fromSet({'bonnie', 'clyde'});
+          bloc.add(UpdateNameVotes(nameVotes));
+          bloc.add(UpdateUserVotes(userVotes));
+          return bloc.add(
+              SubmitNameVote(NameVote(id: 'carrie', name: 'Carrie', votes: 1)));
+        },
+        skip: 4,
+        wait: Duration(seconds: 1),
+        expect: [
+          NameVotesLoaded(nameVotes: [
+            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
+            NameVote(id: 'carrie', name: 'Carrie', votes: 1, reference: null),
+            NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
+          ], userVotes: UserVotes.fromSet({'bonnie', 'carrie', 'clyde'}))
+        ],
+        verify: (NameVotesBloc bloc) async {
+          final state = NameVotesLoaded(nameVotes: [
+            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
+            NameVote(id: 'carrie', name: 'Carrie', votes: 1, reference: null),
+            NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
+          ], userVotes: UserVotes.fromSet({'bonnie', 'carrie', 'clyde'}));
+          expect(bloc.state == state, isTrue);
+        });
   });
 }
