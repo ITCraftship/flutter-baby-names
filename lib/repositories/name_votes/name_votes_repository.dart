@@ -7,6 +7,7 @@ abstract class NameVotesRepository {
   Stream<List<NameVote>> all();
   Stream<UserVotes> my();
   Future<void> recordVote(String name);
+  Future<void> withdrawVote(String name);
 }
 
 // TODO: we can implement more repositories using for example:
@@ -43,5 +44,15 @@ class FirestoreNameVotesRepository extends NameVotesRepository {
         .collection('names')
         .document(name)
         .setData({'vote': true});
+  }
+
+  @override
+  Future<void> withdrawVote(String name) async {
+    await _firestore
+        .collection('votes')
+        .document(_userId)
+        .collection('names')
+        .document(name)
+        .delete();
   }
 }

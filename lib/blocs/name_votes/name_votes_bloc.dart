@@ -37,6 +37,8 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
       yield* _mapUpdateUserVotesToState(event);
     } else if (event is SubmitNameVote) {
       _mapSubmitNameVoteToState(event);
+    } else if (event is WithdrawNameVote) {
+      _mapWithdrawNameVoteToState(event);
     }
   }
 
@@ -86,6 +88,30 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
     // but still writing to the repository in case another device has deleted the vote
     // Firestore hook
     await _nameVotesRepository.recordVote(event.vote.id);
+  }
+
+  _mapWithdrawNameVoteToState(WithdrawNameVote event) async {
+    if (state is! NameVotesLoaded) {
+      return;
+    }
+
+    final NameVotesLoaded currentState = state as NameVotesLoaded;
+
+    if (!currentState.userVotes.hasVote(event.vote.id)) {
+      return;
+    }
+    final newNameVotes = currentState.nameVotes.map((element) {
+      if (element.id != event.vote.id) {
+        return element;
+      } else {
+        return element.copyWith(votes: element.votes - 1);
+      }
+    }).toList();
+    add(UpdateNameVotes(newNameVotes));
+    final newUserVotes = currentState.userVotes.copyWithout(event.vote.id);
+    add(UpdateUserVotes(newUserVotes));
+
+    await _nameVotesRepository.withdrawVote(event.vote.id);
   }
 
   Stream<NameVotesState> _mapUpdateNameVotesToState(

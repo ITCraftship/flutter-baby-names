@@ -92,7 +92,14 @@ class NameListPage extends StatelessWidget {
           title: Text(record.name),
           trailing: Text(record.votes.toString()),
           onTap: () async {
-            BlocProvider.of<NameVotesBloc>(context).add(SubmitNameVote(record));
+            // up for discussion – where should we handle this?
+            if (!alreadyVoted) {
+              BlocProvider.of<NameVotesBloc>(context)
+                  .add(SubmitNameVote(record));
+            } else {
+              BlocProvider.of<NameVotesBloc>(context)
+                  .add(WithdrawNameVote(record));
+            }
           },
         ),
       ),

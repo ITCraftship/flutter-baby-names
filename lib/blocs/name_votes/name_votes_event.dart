@@ -27,6 +27,15 @@ class SubmitNameVote extends NameVotesEvent {
   List<Object> get props => [vote];
 }
 
+class WithdrawNameVote extends NameVotesEvent {
+  final NameVote vote;
+
+  WithdrawNameVote(this.vote);
+
+  @override
+  List<Object> get props => [vote];
+}
+
 class UpdateUserVotes extends NameVotesEvent {
   final UserVotes votes;
 

@@ -15,6 +15,12 @@ class UserVotes extends Equatable {
   UserVotes.fromSnapshot(QuerySnapshot snapshot)
       : this.fromSet(snapshot.documents.map((doc) => doc.documentID).toSet());
 
+  UserVotes copyWithout(name) {
+    return UserVotes(votedNames: {
+      ...votedNames.where((element) => element != name).toSet()
+    });
+  }
+
   @override
   List<Object> get props => [votedNames];
 }
