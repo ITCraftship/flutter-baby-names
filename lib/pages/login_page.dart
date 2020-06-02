@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:name_voter/models/validators.dart';
 import 'package:name_voter/services/auth/auth.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Baby Name Votes')),
+      body: Center(
+        child: LoginForm(),
+      ),
+    );
+  }
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   final formKey = GlobalKey<FormState>();
   String _email, _password;
   FormType _formType = FormType.login;
@@ -39,8 +52,28 @@ class _LoginPageState extends State<LoginPage> {
 
           print('Registered $userId');
         }
-      } catch (e) {
-        print(e);
+      } on PlatformException catch (e) {
+        // TODO: we could handle specific codes like 'ERROR_WEAK_PASSWORD', but we'll just handle this generically
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.warning,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+              Expanded(
+                  child: Text(
+                e.message,
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color),
+              ))
+            ],
+          ),
+          backgroundColor: Theme.of(context).dialogBackgroundColor,
+        ));
       }
     }
   }
@@ -64,18 +97,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Baby Name Votes')),
-      body: Center(
-        child: Form(
-          key: formKey,
-          child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: buildInputs() + buildButtons(),
-              )),
-        ),
-      ),
+    return Form(
+      key: formKey,
+      child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: buildInputs() + buildButtons(),
+          )),
     );
   }
 
