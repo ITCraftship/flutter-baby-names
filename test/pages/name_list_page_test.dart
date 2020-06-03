@@ -113,10 +113,55 @@ void main() {
           findsNWidgets(1));
     });
 
-    // group('integration tests', () {
-    //   test(
-    //       'shows a checkmark icon next to the names the current user has voted on',
-    //       () {});
-    // });
+    group('integration tests', () {
+      testWidgets(
+          'after making a vote, the list displays a star next to an item with user\'s vote',
+          (WidgetTester tester) async {
+        final nameVotes = [
+          NameVote(id: 'julie', name: 'Julie', votes: 0),
+          NameVote(id: 'anne', name: 'Anne', votes: 3),
+          NameVote(id: 'jenny', name: 'Jenny', votes: 5)
+        ];
+        final nameVotesRepository = MockNameVotesRepository();
+        when(nameVotesRepository.all())
+            .thenAnswer((realInvocation) => Stream.value(nameVotes));
+        when(nameVotesRepository.my())
+            .thenAnswer((realInvocation) => Stream.empty());
+        when(nameVotesRepository.recordVote(argThat(anything)))
+            .thenAnswer((_) => Future.value());
+
+        final bloc = NameVotesBloc(nameVotesRepository: nameVotesRepository)
+          ..add(LoadNameVotes());
+
+        await tester.pumpWidget(BlocProvider<NameVotesBloc>(
+          create: (context) => bloc,
+          child: TestWidget(),
+        ));
+
+        expect(find.byType(ListTile), findsNWidgets(3));
+        expect(
+            find.byWidgetPredicate((Widget widget) =>
+                widget is ListTile && widget.leading != null),
+            findsNothing);
+
+        await tester.tap(find.byWidgetPredicate((widget) =>
+            widget is ListTile &&
+            widget.title is Text &&
+            (widget.title as Text).data == 'Anne'));
+
+        await tester.pump();
+
+        expect(
+            find.byWidgetPredicate((Widget widget) =>
+                widget is ListTile && widget.leading != null),
+            findsNWidgets(1));
+
+        bloc.close();
+      });
+
+      // test(
+      //     'shows a checkmark icon next to the names the current user has voted on',
+      //     () {});
+    });
   });
 }
