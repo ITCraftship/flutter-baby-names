@@ -153,15 +153,14 @@ void main() {
 
         expect(
             find.byWidgetPredicate((Widget widget) =>
-                widget is ListTile && widget.leading != null),
+                widget is ListTile &&
+                widget.leading != null &&
+                widget.title is Text &&
+                (widget.title as Text).data == 'Anne'),
             findsNWidgets(1));
 
         bloc.close();
       });
-
-      // test(
-      //     'shows a checkmark icon next to the names the current user has voted on',
-      //     () {});
     });
   });
 }
