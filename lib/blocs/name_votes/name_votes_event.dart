@@ -12,7 +12,7 @@ class LoadNameVotes extends NameVotesEvent {}
 class UpdateNameVotes extends NameVotesEvent {
   final List<NameVote> votes;
 
-  UpdateNameVotes(this.votes);
+  const UpdateNameVotes(this.votes);
 
   @override
   List<Object> get props => [votes];
@@ -21,7 +21,7 @@ class UpdateNameVotes extends NameVotesEvent {
 class SubmitNameVote extends NameVotesEvent {
   final NameVote vote;
 
-  SubmitNameVote(this.vote);
+  const SubmitNameVote(this.vote);
 
   @override
   List<Object> get props => [vote];
@@ -30,7 +30,7 @@ class SubmitNameVote extends NameVotesEvent {
 class WithdrawNameVote extends NameVotesEvent {
   final NameVote vote;
 
-  WithdrawNameVote(this.vote);
+  const WithdrawNameVote(this.vote);
 
   @override
   List<Object> get props => [vote];
@@ -39,7 +39,7 @@ class WithdrawNameVote extends NameVotesEvent {
 class UpdateUserVotes extends NameVotesEvent {
   final UserVotes votes;
 
-  UpdateUserVotes(this.votes);
+  const UpdateUserVotes(this.votes);
 
   @override
   List<Object> get props => [votes];

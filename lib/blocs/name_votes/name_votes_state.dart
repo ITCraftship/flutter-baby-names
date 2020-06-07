@@ -13,9 +13,9 @@ class NameVotesLoaded extends NameVotesState {
   final List<NameVote> nameVotes;
   final UserVotes userVotes;
 
-  NameVotesLoaded({nameVotes, userVotes})
-      : this.nameVotes = nameVotes ?? [],
-        this.userVotes = userVotes ?? UserVotes(),
+  NameVotesLoaded({List<NameVote> nameVotes, UserVotes userVotes})
+      : nameVotes = nameVotes ?? [],
+        userVotes = userVotes ?? UserVotes(),
         super();
 
   @override

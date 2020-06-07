@@ -7,23 +7,23 @@ class NameVote extends Equatable {
   final int votes;
   final DocumentReference reference;
 
-  NameVote({this.id, this.name, this.votes, this.reference});
+  const NameVote({this.id, this.name, this.votes, this.reference});
 
   NameVote.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['name'] != null),
         assert(map['votes'] != null),
-        name = map['name'],
-        votes = map['votes'],
+        name = map['name'] as String,
+        votes = map['votes'] as int,
         id = reference.documentID;
 
   NameVote.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   NameVote copyWith({String name, int votes}) => NameVote(
-      id: this.id,
+      id: id,
       name: name ?? this.name,
       votes: votes ?? this.votes,
-      reference: this.reference);
+      reference: reference);
 
   @override
   String toString() => "Record<$name:$votes>";

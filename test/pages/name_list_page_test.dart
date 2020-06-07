@@ -28,7 +28,7 @@ class TestWidget extends StatelessWidget {
       title: 'Name List Test',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Test'),
+          title: const Text('Test'),
         ),
         body: NameListPage(),
       ),
@@ -66,7 +66,7 @@ void main() {
 
     testWidgets('renders 2 names with vote counts properly',
         (WidgetTester tester) async {
-      final nameVotes = [
+      const nameVotes = [
         NameVote(id: '123', name: 'Julie', votes: 0),
         NameVote(id: '234', name: 'Anne', votes: 3)
       ];
@@ -88,12 +88,12 @@ void main() {
     testWidgets(
         'renders a checkmark icon next to a name that we already voted for',
         (WidgetTester tester) async {
-      final nameVotes = [
+      const nameVotes = [
         NameVote(id: 'julie', name: 'Julie', votes: 0),
         NameVote(id: 'anne', name: 'Anne', votes: 3),
         NameVote(id: 'jenny', name: 'Jenny', votes: 5)
       ];
-      final userVotes = UserVotes(votedNames: {'jenny'});
+      final userVotes = UserVotes(votedNames: const {'jenny'});
       final MockNameVotesBloc bloc = MockNameVotesBloc();
       whenListen(
           bloc,
@@ -115,9 +115,9 @@ void main() {
 
     group('integration tests', () {
       testWidgets(
-          'after making a vote, the list displays a star next to an item with user\'s vote',
+          "after making a vote, the list displays a star next to an item with user's vote",
           (WidgetTester tester) async {
-        final nameVotes = [
+        const nameVotes = [
           NameVote(id: 'julie', name: 'Julie', votes: 0),
           NameVote(id: 'anne', name: 'Anne', votes: 3),
           NameVote(id: 'jenny', name: 'Jenny', votes: 5)
@@ -126,7 +126,7 @@ void main() {
         when(nameVotesRepository.all())
             .thenAnswer((realInvocation) => Stream.value(nameVotes));
         when(nameVotesRepository.my())
-            .thenAnswer((realInvocation) => Stream.empty());
+            .thenAnswer((realInvocation) => const Stream.empty());
         when(nameVotesRepository.recordVote(argThat(anything)))
             .thenAnswer((_) => Future.value());
 

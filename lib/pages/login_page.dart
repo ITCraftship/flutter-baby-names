@@ -9,7 +9,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Baby Name Votes')),
+      appBar: AppBar(title: const Text('Baby Name Votes')),
       body: Center(
         child: LoginForm(),
       ),
@@ -23,7 +23,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String _email, _password;
   FormType _formType = FormType.login;
 
@@ -37,17 +37,17 @@ class _LoginFormState extends State<LoginForm> {
     return false;
   }
 
-  void submit() async {
+  Future<void> submit() async {
     if (validate()) {
       try {
         final auth = Provider.of<BaseAuth>(context, listen: false);
         if (_formType == FormType.login) {
-          String userId =
+          final String userId =
               await auth.signInWithEmailAndPassword(_email, _password);
 
           print('Signed in $userId');
         } else {
-          String userId =
+          final String userId =
               await auth.createUserWithEmailAndPassword(_email, _password);
 
           print('Registered $userId');
@@ -58,7 +58,7 @@ class _LoginFormState extends State<LoginForm> {
           content: Row(
             children: [
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.warning,
                   color: Theme.of(context).colorScheme.error,
@@ -82,7 +82,7 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
-  void signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     try {
       final auth = Provider.of<BaseAuth>(context, listen: false);
       final id = await auth.signInWithGoogle();
@@ -97,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
     return Form(
       key: formKey,
       child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: buildInputs() + buildButtons(),
           )),
@@ -108,11 +108,11 @@ class _LoginFormState extends State<LoginForm> {
     return [
       TextFormField(
           validator: EmailValidator.validate,
-          decoration: InputDecoration(labelText: 'Email'),
+          decoration: const InputDecoration(labelText: 'Email'),
           onSaved: (value) => _email = value),
       TextFormField(
           validator: PasswordValidator.validate,
-          decoration: InputDecoration(labelText: 'Password'),
+          decoration: const InputDecoration(labelText: 'Password'),
           obscureText: true,
           onSaved: (value) => _password = value),
     ];
@@ -122,39 +122,39 @@ class _LoginFormState extends State<LoginForm> {
     if (_formType == FormType.login) {
       return [
         Container(
-          margin: EdgeInsets.only(top: 16),
+          margin: const EdgeInsets.only(top: 16),
           child: RaisedButton(
               onPressed: () {
                 submit();
               },
-              child: Text('Login')),
+              child: const Text('Login')),
         ),
         FlatButton(
           onPressed: () {
             switchFormState(FormType.register);
           },
-          child: Text('Register'),
+          child: const Text('Register'),
         ),
         FlatButton(
-          child: Text('Sign in with Google'),
           onPressed: signInWithGoogle,
+          child: const Text('Sign in with Google'),
         )
       ];
     } else {
       return [
         Container(
-          margin: EdgeInsets.only(top: 16),
+          margin: const EdgeInsets.only(top: 16),
           child: RaisedButton(
               onPressed: () {
                 submit();
               },
-              child: Text('Create account')),
+              child: const Text('Create account')),
         ),
         FlatButton(
           onPressed: () {
             switchFormState(FormType.login);
           },
-          child: Text('Go to Login'),
+          child: const Text('Go to Login'),
         )
       ];
     }

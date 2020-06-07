@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
 class MediaPage extends StatefulWidget {
-  MediaPage({Key key}) : super(key: key);
+  const MediaPage({Key key}) : super(key: key);
 
   @override
   _MediaPageState createState() => _MediaPageState();
@@ -12,7 +12,7 @@ class MediaPage extends StatefulWidget {
 class _MediaPageState extends State<MediaPage>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  final picker = ImagePicker();
+  final ImagePicker picker = ImagePicker();
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _MediaPageState extends State<MediaPage>
         onPressed: () async {
           await getImage(context);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

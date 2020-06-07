@@ -19,22 +19,22 @@ void main() {
 
   group('NameVotesBloc', () {
     final nameVotes = [
-      NameVote(id: 'one', name: 'George', votes: 5, reference: null),
-      NameVote(id: 'two', name: 'Ben', votes: 2, reference: null)
+      const NameVote(id: 'one', name: 'George', votes: 5),
+      const NameVote(id: 'two', name: 'Ben', votes: 2)
     ];
 
-    final userVotes = UserVotes.fromSet({'jenny', 'moira'});
+    const userVotes = UserVotes.fromSet({'jenny', 'moira'});
 
     blocTest(
         'subscribes to all() and my() vites of the repository on LoadNameVotes event',
         build: () async {
           when(nameVotesRepository.all())
-              .thenAnswer((realInvocation) => Stream.empty());
+              .thenAnswer((realInvocation) => const Stream.empty());
           when(nameVotesRepository.my())
-              .thenAnswer((realInvocation) => Stream.empty());
+              .thenAnswer((realInvocation) => const Stream.empty());
           return NameVotesBloc(nameVotesRepository: nameVotesRepository);
         },
-        act: (bloc) => bloc.add(LoadNameVotes()),
+        act: (bloc) async => bloc.add(LoadNameVotes()),
         verify: (_) async {
           verify(nameVotesRepository.all()).called(1);
           verify(nameVotesRepository.my()).called(1);
@@ -52,11 +52,11 @@ void main() {
           when(nameVotesRepository.all())
               .thenAnswer((realInvocation) => Stream.value(nameVotes));
           when(nameVotesRepository.my())
-              .thenAnswer((realInvocation) => Stream.empty());
+              .thenAnswer((realInvocation) => const Stream.empty());
           return NameVotesBloc(nameVotesRepository: nameVotesRepository);
         },
-        act: (bloc) => bloc.add(LoadNameVotes()),
-        wait: const Duration(milliseconds: 0), // need to add wait, so that the listen on all() adds an event to the block
+        act: (bloc) async => bloc.add(LoadNameVotes()),
+        wait: const Duration(), // need to add wait, so that the listen on all() adds an event to the block
         expect: [NameVotesLoaded(nameVotes: nameVotes)]);
 
     // the blocTest doesn't yet allow to wait for all times, so to test
@@ -67,7 +67,7 @@ void main() {
           'emits [NameVotesLoaded] with user votes when the name votes repository publishes my votes',
           build: () async {
         when(nameVotesRepository.all())
-            .thenAnswer((realInvocation) => Stream.empty());
+            .thenAnswer((realInvocation) => const Stream.empty());
         when(nameVotesRepository.my())
             .thenAnswer((realInvocation) => Stream.value(userVotes));
         return NameVotesBloc(nameVotesRepository: nameVotesRepository);
@@ -75,7 +75,7 @@ void main() {
         bloc.add(LoadNameVotes());
         async.flushTimers();
       },
-          wait: const Duration(milliseconds: 0),
+          wait: const Duration(),
           expect: [NameVotesLoaded(userVotes: userVotes)]);
     });
 
@@ -91,7 +91,7 @@ void main() {
       }, act: (bloc) async {
         bloc.add(LoadNameVotes());
         async.flushTimers();
-      }, wait: const Duration(milliseconds: 0), expect: [
+      }, wait: const Duration(), expect: [
         NameVotesLoaded(nameVotes: nameVotes),
         NameVotesLoaded(nameVotes: nameVotes, userVotes: userVotes)
       ]);
@@ -100,42 +100,42 @@ void main() {
     // TODO: test that when the user has already submitted a vote, there will be no update of vote count
 
     blocTest(
-        'publishes [NameVotesLoaded] with the new vote when the submitted name vote didn\'t exist',
+        "publishes [NameVotesLoaded] with the new vote when the submitted name vote didn't exist",
         build: () async {
           when(nameVotesRepository.all())
-              .thenAnswer((realInvocation) => Stream.empty());
+              .thenAnswer((realInvocation) => const Stream.empty());
           when(nameVotesRepository.my())
-              .thenAnswer((realInvocation) => Stream.empty());
+              .thenAnswer((realInvocation) => const Stream.empty());
           when(nameVotesRepository.recordVote(argThat(anything)))
               .thenAnswer((_) => Future.value());
           return NameVotesBloc(nameVotesRepository: nameVotesRepository);
         },
-        act: (bloc) {
+        act: (bloc) async {
           final nameVotes = [
-            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
-            NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
+            const NameVote(id: 'bonnie', name: 'Bonnie', votes: 5),
+            const NameVote(id: 'clyde', name: 'Clyde', votes: 2)
           ];
-          final userVotes = UserVotes.fromSet({'bonnie', 'clyde'});
+          const userVotes = UserVotes.fromSet({'bonnie', 'clyde'});
           bloc.add(UpdateNameVotes(nameVotes));
-          bloc.add(UpdateUserVotes(userVotes));
-          return bloc.add(
-              SubmitNameVote(NameVote(id: 'carrie', name: 'Carrie', votes: 1)));
+          bloc.add(const UpdateUserVotes(userVotes));
+          return bloc.add(const SubmitNameVote(
+              NameVote(id: 'carrie', name: 'Carrie', votes: 1)));
         },
         skip: 4,
-        wait: Duration(seconds: 1),
+        wait: const Duration(seconds: 1),
         expect: [
-          NameVotesLoaded(nameVotes: [
-            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
-            NameVote(id: 'carrie', name: 'Carrie', votes: 1, reference: null),
-            NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
-          ], userVotes: UserVotes.fromSet({'bonnie', 'carrie', 'clyde'}))
+          NameVotesLoaded(nameVotes: const [
+            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5),
+            NameVote(id: 'carrie', name: 'Carrie', votes: 1),
+            NameVote(id: 'clyde', name: 'Clyde', votes: 2)
+          ], userVotes: const UserVotes.fromSet({'bonnie', 'carrie', 'clyde'}))
         ],
         verify: (NameVotesBloc bloc) async {
-          final state = NameVotesLoaded(nameVotes: [
-            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5, reference: null),
-            NameVote(id: 'carrie', name: 'Carrie', votes: 1, reference: null),
-            NameVote(id: 'clyde', name: 'Clyde', votes: 2, reference: null)
-          ], userVotes: UserVotes.fromSet({'bonnie', 'carrie', 'clyde'}));
+          final state = NameVotesLoaded(nameVotes: const [
+            NameVote(id: 'bonnie', name: 'Bonnie', votes: 5),
+            NameVote(id: 'carrie', name: 'Carrie', votes: 1),
+            NameVote(id: 'clyde', name: 'Clyde', votes: 2)
+          ], userVotes: const UserVotes.fromSet({'bonnie', 'carrie', 'clyde'}));
           expect(bloc.state == state, isTrue);
         });
   });

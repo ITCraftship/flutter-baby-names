@@ -12,21 +12,21 @@ class NameListPage extends StatelessWidget {
     return BlocBuilder<NameVotesBloc, NameVotesState>(
       builder: (context, state) {
         if (state is NameVotesLoading) {
-          return LinearProgressIndicator();
+          return const LinearProgressIndicator();
         }
         if (state is NameVotesLoaded) {
           return _buildList(context, state.nameVotes, state.userVotes);
         }
-        return Text('Uknown state');
+        return const Text('Uknown state');
       },
     );
   }
 
   Widget _buildList(
       BuildContext context, List<NameVote> votes, UserVotes userVotes) {
-    return votes.length > 0
+    return votes.isNotEmpty
         ? buildVotesPage(context, votes, userVotes)
-        : Center(
+        : const Center(
             child: Text('No names available to vote'),
           );
   }
@@ -48,16 +48,16 @@ class NameListPage extends StatelessWidget {
   }
 
   Widget buildProposeButton(BuildContext context) {
-    final proposeNameHandler = (String name) {
+    void proposeNameHandler(String name) {
       BlocProvider.of<NameVotesBloc>(context).add(SubmitNameVote(
           NameVote(id: name.toLowerCase(), name: name, votes: 1)));
-    };
+    }
 
     return Row(
       children: [
         Expanded(
             child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: RaisedButton(
             onPressed: () {
               showDialog(
@@ -70,7 +70,7 @@ class NameListPage extends StatelessWidget {
                 },
               );
             },
-            child: Text('Propose a new name'),
+            child: const Text('Propose a new name'),
           ),
         ))
       ],
@@ -88,7 +88,7 @@ class NameListPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: ListTile(
-          leading: alreadyVoted ? Icon(Icons.star_border) : null,
+          leading: alreadyVoted ? const Icon(Icons.star_border) : null,
           title: Text(record.name),
           trailing: Text(record.votes.toString()),
           onTap: () async {

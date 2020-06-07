@@ -16,7 +16,7 @@ abstract class NameVotesRepository {
 
 class FirestoreNameVotesRepository extends NameVotesRepository {
   final String _userId;
-  Firestore _firestore = Firestore.instance;
+  final Firestore _firestore = Firestore.instance;
 
   FirestoreNameVotesRepository(this._userId);
 

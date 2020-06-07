@@ -58,7 +58,7 @@ class LoginSwitcher extends StatelessWidget {
                     )
                   ], child: TabBarPage());
           }
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         });
   }
 }

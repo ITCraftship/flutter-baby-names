@@ -18,7 +18,7 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
   StreamSubscription _votesSubscription;
   StreamSubscription _userVotesSubscription;
 
-  NameVotesBloc({@required nameVotesRepository})
+  NameVotesBloc({@required NameVotesRepository nameVotesRepository})
       : assert(nameVotesRepository != null),
         _nameVotesRepository = nameVotesRepository;
 
@@ -42,7 +42,7 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
     }
   }
 
-  _mapLoadNameVotesToState() {
+  void _mapLoadNameVotesToState() {
     _votesSubscription?.cancel();
     _votesSubscription = _nameVotesRepository
         .all()
@@ -55,7 +55,7 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
 
   // submitting a vote should be in UserVotesBloc and it would call add on NameVotes
   // only if a vote hasn't already been submitted
-  _mapSubmitNameVoteToState(SubmitNameVote event) async {
+  Future<void> _mapSubmitNameVoteToState(SubmitNameVote event) async {
     if (state is! NameVotesLoaded) {
       return;
     }
@@ -90,7 +90,7 @@ class NameVotesBloc extends Bloc<NameVotesEvent, NameVotesState> {
     await _nameVotesRepository.recordVote(event.vote.id);
   }
 
-  _mapWithdrawNameVoteToState(WithdrawNameVote event) async {
+  Future<void> _mapWithdrawNameVoteToState(WithdrawNameVote event) async {
     if (state is! NameVotesLoaded) {
       return;
     }

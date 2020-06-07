@@ -8,19 +8,13 @@ class NewNameDialog extends StatefulWidget {
       : super(key: key);
 
   @override
-  _NewNameDialogState createState() =>
-      _NewNameDialogState(onCancel: onCancel, onNamePropose: onNamePropose);
+  _NewNameDialogState createState() => _NewNameDialogState();
 }
 
 class _NewNameDialogState extends State<NewNameDialog> {
-  final Function(String) onNamePropose;
-  final Function onCancel;
-
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  final newNameTextController = TextEditingController();
-
-  _NewNameDialogState({this.onNamePropose, this.onCancel});
+  final TextEditingController newNameTextController = TextEditingController();
 
   @override
   void dispose() {
@@ -32,24 +26,24 @@ class _NewNameDialogState extends State<NewNameDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Propose new name'),
+      title: const Text('Propose new name'),
       content: TextField(
         controller: newNameTextController,
       ),
       actions: [
         FlatButton(
           onPressed: () {
-            onCancel?.call();
+            widget.onCancel?.call();
             Navigator.of(context).pop();
           },
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         RaisedButton(
           onPressed: () {
-            onNamePropose?.call(newNameTextController.text);
+            widget.onNamePropose?.call(newNameTextController.text);
             Navigator.of(context).pop();
           },
-          child: Text('Propose'),
+          child: const Text('Propose'),
         )
       ],
     );

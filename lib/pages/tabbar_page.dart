@@ -19,26 +19,26 @@ class TabContainer {
   TabContainer(this.navigationItem, this.content);
 }
 
-final tabs = <TabContainer>[
+final List<TabContainer> tabs = <TabContainer>[
   TabContainer(
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.toc),
         title: Text('Names'),
       ),
       NameListPage()),
   TabContainer(
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       icon: Icon(Icons.perm_media),
       title: Text('Media'),
     ),
-    MediaPage(),
+    const MediaPage(),
   )
 ];
 
 class _TabBarPageState extends State<TabBarPage> {
   int _currentTabIndex = 0;
 
-  _changeTab(int value) {
+  void _changeTab(int value) {
     setState(() {
       _currentTabIndex = value;
     });
@@ -48,7 +48,7 @@ class _TabBarPageState extends State<TabBarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Baby Name Votes'),
+        title: const Text('Baby Name Votes'),
         actions: <Widget>[
           FlatButton(
               onPressed: () async {
@@ -59,7 +59,7 @@ class _TabBarPageState extends State<TabBarPage> {
                   print(e);
                 }
               },
-              child: Text('Sign out'))
+              child: const Text('Sign out'))
         ],
       ),
       body: tabs[_currentTabIndex].content,
