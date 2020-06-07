@@ -25,7 +25,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Baby Names',
         home: LoginSwitcher(),
-        theme: ThemeData.dark(),
+        theme: ThemeData.dark().copyWith(
+            snackBarTheme: ThemeData.dark().snackBarTheme.copyWith(
+                contentTextStyle: TextStyle(
+                    color: ThemeData.dark().textTheme.bodyText1.color),
+                backgroundColor: ThemeData.dark().dialogBackgroundColor)),
       ),
     );
   }

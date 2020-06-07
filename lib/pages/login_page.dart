@@ -67,12 +67,9 @@ class _LoginFormState extends State<LoginForm> {
               Expanded(
                   child: Text(
                 e.message,
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color),
               ))
             ],
           ),
-          backgroundColor: Theme.of(context).dialogBackgroundColor,
         ));
       }
     }
