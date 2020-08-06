@@ -33,12 +33,10 @@ Go to https://developer.android.com/studio/publish/app-signing and complete the 
 ### Generate a key and keystore
 
 1.  Use the following command to initiate keytore and certificate generation:  
-    `keytool -genkey -v -keystore name-voter-release.keystore -keyalg RSA -keysize 2048 -validity 10000 -alias name-voter`
-1.  Export the certificate:  
-    `keytool -export -rfc -alias name-voter -file android_upload_certificate.pem -keystore name-voter-release.keystore`
-1.  Backup your `name-voter-release.keystore` file and store passwords safely. If you loose this, then there's a painful process that includes contacting Google's support (see: [Create a new upload key](https://support.google.com/googleplay/android-developer/answer/7384423)).
+    `keytool -genkey -v -keystore itc-release.keystore -keyalg RSA -keysize 2048 -validity 10000 -alias itc`
+1.  Backup your `itc.keystore` file and store passwords safely. If you loose this, then there's a painful process that includes contacting Google's support (see: [Create a new upload key](https://support.google.com/googleplay/android-developer/answer/7384423)).
 1.  Get your SHA1 certificate fingerprint:
-    `keytool -exportcert -list -v -alias name-voter -keystore name-voter-release.keystore`
+    `keytool -exportcert -list -v -alias itc -keystore itc-release.keystore`
 
 ### Generate a google_play.json for upload
 
