@@ -12,6 +12,7 @@ class AuthModel extends ChangeNotifier {
   bool get isAuthenticated => _isAuthenticated;
 
   void setAuthenticated(bool authenticated) {
+    print(_auth);
     _isAuthenticated = authenticated;
     notifyListeners();
   }
