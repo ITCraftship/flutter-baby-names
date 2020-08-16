@@ -109,7 +109,7 @@ end
 platform :android do
   desc 'Builds and signs a production release to distribute in Google Play Store'
   lane :deploy do
-    build_number = number_of_commits()
+    build_number = 57
     common_build_actions()
     Dir.chdir ".." do
       sh("flutter", "build", "apk", "--build-number=#{build_number}")
