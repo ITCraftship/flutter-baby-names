@@ -17,6 +17,11 @@
 # Secure items
 google-services.json
 GoogleService-Info.plist
+google_play.json
+key.properties
+report.xml
+**.ipa
+**.app.**
 
 # IntelliJ related
 *.iml

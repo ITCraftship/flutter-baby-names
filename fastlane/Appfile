@@ -1,0 +1,3 @@
+app_identifier("com.itcraftship.babyNames") # The bundle identifier of your app
+
+team_id("G6W65KPDR6")  # Developer Portal Team ID
