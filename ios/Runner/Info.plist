@@ -33,6 +33,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
 	<key>NSCameraUsageDescription</key>
 	<string>You can upload images of your baby</string>
 	<key>NSPhotoLibraryUsageDescription</key>

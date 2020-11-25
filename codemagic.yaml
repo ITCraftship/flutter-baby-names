@@ -79,4 +79,4 @@ workflows:
     publishing:
       email:
         recipients:
-          - kuba@danielczyk.pl
+          - jakub.danielczyk@itcraftship.com
