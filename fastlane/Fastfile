@@ -109,14 +109,14 @@ end
 platform :android do
   desc 'Builds and signs a production release to distribute in Google Play Store'
   lane :deploy do
-    build_number = number_of_commits()
+    BUILD_NUMBER = ENV['BUILD_NUMBER'].to_s
     common_build_actions()
     Dir.chdir ".." do
-      sh("flutter", "build", "apk", "--build-number=#{build_number}")
+      sh("flutter", "build", "appbundle", "--build-number=#{BUILD_NUMBER}")
     end
 
     supply(
-      apk: "build/app/outputs/apk/release/app-release.apk",
+      aab: "build/app/outputs/bundle/release/app-release.aab",
       json_key: 'google_play.json',
       release_status: 'draft',
       track: 'internal',
